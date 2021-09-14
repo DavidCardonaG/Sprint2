@@ -1,0 +1,131 @@
+#body{
+    background-color: black;
+}
+#btn{
+    border-radius:15px;
+background-color: rgb(0, 0, 0);
+width: 340px;
+height: 50px;
+color: #ce8f1c;
+margin: auto;
+text-align: center;
+margin-top:4rem;
+cursor: pointer
+}
+
+.img{
+    margin:auto;
+width:400px;
+height:300px;
+}
+.icon{
+    width:100px;
+    margin-right: 2rem;
+}
+#Search{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4.83968px 5.27965px;
+    margin-left: 1rem;
+    justify-content: flex-end;
+    position: static;
+    width: 380px;
+    height: 30px;
+    left: 0px;
+    top: 0px;
+    background: #FFFFFE;
+    border: 0.439971px solid #FED941;
+    box-sizing: border-box;
+    border-radius: 3.51977px 0px 0px 3.51977px;
+}
+#form{
+    display:flex;
+    text-align: center;
+}
+#BTN{
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 4.39971px 10.5593px;
+position: static;
+width: 40px;
+height: 32px;
+left: 400px;
+top: 0px;
+background: #FED941;
+border-radius: 0px 1.75988px 1.75988px 0px;
+}
+.link{
+    color:white;
+    text-align: center;
+    text-decoration: none;
+    font-size:18px
+}
+#value{
+    position:relative;
+    width:200px;
+        top:-150px;
+        right: 50px;
+    color:white;
+    font-size:20px;
+    background-color: rgba(0, 0, 0, 0.562);
+    font-family: Montserrat;
+font-style: normal;
+font-weight: bold;
+}
+
+#btn1{
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 4.39971px 10.5593px;
+position: relative;
+width:200px;
+height:50px;
+left: 50px;
+top: -100px;
+background: #FED941;
+border-radius: 2px;
+font-family: Montserrat;
+font-style: normal;
+font-weight: bold;
+font-size: 20px;
+line-height: 12px;
+text-align: center;
+color: #000000;
+
+}
+#btn2{
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 4.39971px 10.5593px;
+position: relative;
+width:200px;
+height:50px;
+left: 22%;
+right: 0%;
+top: -150px;
+bottom: 0%;
+background: #0C0E16;
+border: 0.439971px solid #FED941;
+box-sizing: border-box;
+border-radius: 1.75988px;
+font-family: Montserrat;
+font-style: normal;
+font-weight: bold;
+font-size: 20px;
+line-height: 12px;
+text-align: center;
+color: #FED941;
+}
+.fas{
+    color: yellow;
+}
+#fas2{
+    color: black;
+}

@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
 
+import LoginButton from './Components/Login'
+import Perfil from './Components/Perfil'
+import LogoutButton from './Components/Logout'
+import { useAuth0 } from "@auth0/auth0-react";
+import {IMG} from './Styled/App'
+import Navbar from './Components/Navbar'
+import Carrusel from './Components/Carrusel'
+import Movies from './Components/Movies'
+import {H1} from './Styled/App'
 function App() {
+const {isAuthenticated} = useAuth0();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       {isAuthenticated ?(
+         <>
+         <Carrusel/>
+         <Navbar/>
+         <Movies />
+         <Perfil/>
+       <LogoutButton/>
+       </>
+       )  : (
+       <LoginButton/>
+       )}
     </div>
   );
 }
