@@ -1,29 +1,57 @@
-import React, { Component } from 'react'
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect,useState } from 'react'
+import { Link} from 'react-router-dom';
 import {NAV,Header,Lin} from '../Styled/App'
-export default class Navbar extends Component {
-    constructor() {
-        super()
-        this.state = {
-            movies: [],
-            searchTerm: '',
-            error: ''
-        }
-        this.apiKey = process.env.REACT_APP_API
-    }
-    handleSubmit = (e) =>{
-        e.preventDefault()
-        fetch (`https://block-master.herokuapp.com/peliculas`)
-        .then(data => data.json())
-        .then(data =>{
-            console.log(data);
-            this.setState({movies:[...data.results]})
+import Cards from '../Components/Cards'
+import axios from 'axios'
+const url = "https://block-master.herokuapp.com/peliculas";
+
+function Navbar(){
+
+    const [pelis,setPelis] = useState([]);
+    const [tpeliculas,setTpeliculas] = useState([]);
+    const [search,setSearch] = useState("");
+
+    const peticionSearch = async() =>{
+      await  axios.get(url)
+        .then (response =>{
+            setPelis(response.data)
         })
+        .catch (error => {
+            console.log(error);
+        }) 
     }
 
-    render() {
-        
-        return (
+    const handleChange =(e) => {
+        setSearch(e.target.value)
+       console.log(e.target.value )
+    }
+
+    // const filtrar=(terminoBusqueda)=>{
+    //     var resultadosBusqueda=tpeliculas.filter((elemento)=>{
+    //       if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+    //       || elemento.company.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+    //       ){
+    //         return elemento;
+    //       }
+    //     });
+    //     setTpeliculas(resultadosBusqueda);
+    //   }
+
+    useEffect(()=>{
+        peticionSearch()
+    }, []);
+
+    return (
+        <div>
+             { pelis &&
+                pelis.map(movies => (
+                    <Cards
+                        key={movies.id}
+                        movie={movies}
+                    />
+                    
+                ))
+            }
             <Header>
                 <NAV className="">
                     <img 
@@ -35,25 +63,27 @@ export default class Navbar extends Component {
                   <a className="link" href="#">Todas</a>
                   </Lin>
                   <Lin>
-                  <a className="link" href="#">Más Valoradas</a>
+                  <Link to="/Mas/"> Más Valoradas</Link>
                   </Lin>
                   <Lin>
-                  <a className="link" href="#">Menos Valoradas</a>
+                  <Link to="/Menos">Menos Valoradas</Link>
                 </Lin>
-                <form action="" id="form" onSubmit="">
-                  <input 
-                    type ="text"
-                    name ="searchTerm"
-                    className = "search"
-                    id="Search"
-                    placeholder="Busca tu pelicula favorita"
-                    onChange={(e) =>this.setState({searchTerm: e.target.value})}
-                    value={this.state.searchTerm}
-                    />
-                    <button handleSubmit={this.handleSubmit} id="BTN" className="BTN"><img src="https://res.cloudinary.com/cardonagarciadavid11/image/upload/v1631522337/Icon_g4cwyy.png" alt="search"></img></button>
-                  </form>
+                <Link className="link" to="/Crud/">Administrar Peliculas </Link>
+                <input 
+                 type ="text"
+                 name ="searchTerm"
+                 className = "search"
+                 id="Search"
+                 placeholder="Busca tu pelicula favorita"
+                 value={search}
+                 onChange={handleChange}
+                 />
+                    <button type="submit" id="BTN" className="BTN"><img src="https://res.cloudinary.com/cardonagarciadavid11/image/upload/v1631522337/Icon_g4cwyy.png" alt="search"></img></button>
+                
                   </NAV>
             </Header>
-        )
-    }
+        </div>
+    )
 }
+
+export default Navbar

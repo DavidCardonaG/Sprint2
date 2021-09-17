@@ -1,166 +1,154 @@
-import axios from "axios";
-import React, { Component } from 'react'
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
+import Swal from 'sweetalert2'
+import {  RiDeleteBin5Line } from "react-icons/ri";
+import { BiEdit } from "react-icons/bi";
+import { Link } from 'react-router-dom';
 const url = "https://block-master.herokuapp.com/peliculas";
 
-export default class Crud extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            data: [],
-            modalInsertar: false,
-            modalEliminar: false,
-            form: {
-                id: '',
-                documento: '',
-                nombres: '',
-                apellidos: '',
-                telefono: '',
-                celular: '',
-                direccion: '',
-                imagen: ''
-            },
-            tipoModal: ''
-        }
+function RegistroProducto() {
+
+    const [modalInsertar, setTipoModalInsertar] = useState(false);
+    const [modalEliminar, setTipoModalEliminar] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [tipoModal, setTipoModal] = useState("");
+   const [peliculas, setPeliculas] = useState([]);
+ 
+   const searchref = useRef()
+    const [values, setValues] = useState({
+        id: '',
+        Type: '',
+        Title: '', 
+        Year: '',
+        Value: '',
+        Description: '',
+        Trailer: '',
+        Poster: ''
+       
+    })
+    const {  id, Type, Title, Year,Value, Description, Trailer,Poster} = values;
+ 
+    const modalInsertar1 = () => {
+        setTipoModalInsertar(!modalInsertar)
     }
-
-    componentDidMount(){
-        this.peticionGet();
+    const peticionGet = async () => {
+       const res =  await fetch(url);
+       const data = await res.json();
+       console.log(data)
+       setPeliculas(data)
     }
+    const seleccionar = (pel) => {
+        setTipoModal('actualizar')
+        setValues({
+            id: pel.id,
+            Type: pel.Type,
+            Title: pel.Title, 
+            Year: pel.Year,
+            Value: pel.Value,
+            Description: pel.Description,
+            Trailer: pel.Trailer,
+            Poster: pel.Poster
 
-    modalInsertar = () => {
-        this.setState({modalInsertar: !this.state.modalInsertar})
+        })
+        console.log(pel)
+   }
+    const peticionPost = async () => {
+       await axios.post(url,values)
+       .then(response => {
+         console.log(response);
+         peticionGet();
+         modalInsertar1()
+       })
+       .catch(error => {
+          console.log(error.message)
+       })
     }
-
-    handlePictureClick = () => {
-        document.querySelector('#fileSelector').click();
-    }
-
-    handleFileChange = (e) => {
-        const file = e.target.files[0];
-        fileUpload(file)
+    const peticionPut = async () => {
+        await axios.put(url+id,values)
         .then(response => {
-            document.getElementById('image').value = response;
-        }).catch(error => {
-            console.log(error.message)
-        })
-    }
-
-    handleChange = async (e) => {
-        e.persist();
-        await this.setState({
-            form:{
-                ...this.state.form,
-                [e.target.name]: e.target.value
-            }
-        })
-        console.log(this.state.form)
-    }
-
-    SeleccionarPelicula = (block) => {
-
-         this.setState({
-             tipoModal: 'actualizar',
-             form: {
-                id: pelicula.id,
-                documento: pelicula.documento,
-                nombres: pelicula.nombres,
-                apellidos: pelicula.apellidos,
-                telefono: pelicula.telefono,
-                celular: pelicula.celular,
-                direccion: pelicula.direccion,
-                imagen: pelicula.imagen
-             }
-         })
-         console.log(pelicula)
-    }
-
-    peticionGet=()=>{
-        axios.get(url)
-        .then(response => {
-            this.setState({data: response.data})
-        })
-        .catch(error => {
-            console.log(error.message);
-        })
-    }
-
-    peticionesPost = async () => {
-        delete this.state.form.id;
-        await axios.post(url,this.state.form)
-        .then(response => {
-            this.modalInsertar();
-            this.peticionGet();
-        }).catch(error => {
-             console.log(error.message);
-        })
-    }
-   
-    peticionPut = async () => {
-        await axios.put(url+this.state.form.id,this.state.form)
-        .then(response => {
-            this.modalInsertar();
-            this.peticionGet();
+            modalInsertar1();
+            peticionGet();
         }).catch(error => {
             console.log(error.message);
         })
     }
-
-    peticionDelete = async () => {
-        await axios.delete(url+this.state.form.id)
+    const handleChange = ({target}) => {
+          setValues({
+            ...values,
+            [target.name]: target.value
+          })
+          console.log(values);
+    }
+    const peticionDelete = async () => {
+        await axios.delete(url+id)
         .then(response => {
-            this.setState({modalEliminar:false});
-            this.peticionGet();
+            setTipoModalEliminar(false);
+           peticionGet();
         }).catch(error => {
             console.log(error.message);
         })
     }
-
-    render() {
-        const {form} = this.state;
-        return (
-            <div className="container">
-                <br />
-                <button className="btn btn-dark"
-                onClick={() => {this.setState({form: null, tipoModal: 'insertar'});this.modalInsertar()}}
-                >Módulo Estudiantes</button>
+  const handleChangeBusca = (e) => {
+      console.log(searchTerm)
+    setSearchTerm(e.target.value )
+  }
+  const filtro = (e) => {
+      e.preventDefault()
+    console.log(searchTerm)
+            
+    let filtro = peliculas.filter(fil => fil.Title.toLowerCase()  === searchTerm.toLowerCase() )
+  
+    console.log(filtro)
+    setPeliculas(filtro)
+  }
+    useEffect((url) => {
+            peticionGet(url)
+        },[searchTerm]);
+ 
+console.log(setValues)
+    return (
+        <div className="App">
+            <Link to="/"> <strong>X</strong></Link>
+                <button className="btn btn-primary" style={{display: 'flex', margin: "20px auto"}}
+                onClick={() => {setTipoModal('insertar');modalInsertar1()}}
+                >Registrar Nueva Pelicula</button>
+                <form onSubmit={filtro} >
+                <input type="text"  name="buscar" style={{display: 'flex', margin: "5px auto"}}  onChange={handleChangeBusca} placeholder="Ingrese el producto a buscar"/>
+                </form>
+                <button className="btn btn-success" style={{display: 'flex', margin: "5px auto"}}
+                onClick={filtro}
+                >Buscar</button>
                 <br /> <br />
+                <h1 className="titleBodega">TIENDA PELICULAS</h1>
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Documento</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Teléfono</th>
-                            <th>Celular</th>
-                            <th>Dirección</th>
+                            
+                            <th></th>
+                            <th>Titulo</th>
+                            <th>Año</th>
+                            <th>Calificación</th>
                             <th>Imagen</th>
-                            <th>Operaciones</th>
-                        </tr>
+                            <th></th>
+                    </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.data.map(est => {
+                            peliculas.map(produc => {
                                 return(
-                                    <tr key={est.id}>
-                                        <td>{est.id}</td>
-                                        <td>{est.documento}</td>
-                                        <td>{est.nombres}</td>
-                                        <td>{est.apellidos}</td>
-                                        <td>{est.telefono}</td>
-                                        <td>{est.celular}</td>
-                                        <td>{est.direccion}</td>
-                                        <td><img src={est.imagen} width="50px" height="70px" alt=""/></td>
-                                        <button className="btn btn-primary"
-                                         onClick={() => {this.SeleccionarEstudiante(est); this.modalInsertar()}}><FontAwesomeIcon icon={faEdit}/></button>
-                                         {" "}
-                                         <button className="btn btn-danger"
-                                         onClick={() => {this.SeleccionarEstudiante(est); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrashAlt}/></button>
+                                    <tr key={produc.id}>
+                                        <td><img src={produc.Poster} width="100px" height="120px" alt=""/></td>
+                                        <td>{produc.Title}</td>
+                                        <td>{produc.Year}</td>
+                                        <td>{produc.Value}</td>
+                                        <td>{produc.Description}</td>
+                                       <td> <button className="btn btn-primary"
+                                         onClick={() => {seleccionar(produc); modalInsertar1()}}><BiEdit/></button>
+                                        <br/><br/>
+                                       <button className="btn btn-danger"
+                                         onClick={() => {seleccionar(produc); setTipoModalEliminar(true)}}><RiDeleteBin5Line/></button></td>
                                     </tr>
                                 )
                             })
@@ -168,88 +156,71 @@ export default class Crud extends Component {
                       
                     </tbody>
                 </table>
-
-                <Modal isOpen={this.state.modalInsertar}>
-                    <h1>Crear Estudiante</h1>
+<Modal isOpen={modalInsertar}>
                     <ModalHeader style={{display: 'block'}}>
-                        <span style={{float: 'right'}}>x</span>
+                        <span onClick={() =>{ modalInsertar1();setValues({}) }  } style={{float: 'right', cursor: 'pointer'}}>x</span>
                     </ModalHeader>
                     <ModalBody>
                         <div className="form-group">
-                            <label htmlFor="id">id</label>
-                            <input className="form-control" type="text" name="id" id="id" readOnly onChange={this.handleChange} value={form?form.id:''}/>
+                            <h1>INVENTARIO BLOCK-MASTER</h1>
+                       
+                        <input className="form-control" ref={searchref} required type="text" hidden name="id" id="id" readOnly onChange={handleChange} value={values?values.id:''}/>
                             <br/>
-                            <label htmlFor="documento">Documento</label>
-                            <input className="form-control" type="text" name="documento" id="documento" onChange={this.handleChange} value={form?form.documento:''}/>
+                            <label htmlFor="nombre">Tipo</label>
+                        <input className="form-control" type="text" required name="Type" id="tipo" onChange={handleChange} value={values.Type}/>
                             <br/>
-                            <label htmlFor="nombres">Nombres</label>
-                            <input className="form-control" type="text" name="nombres" id="nombres" onChange={this.handleChange} value={form?form.nombres:''}/>
+                           <label htmlFor="nombre">Titulo</label>
+                        <input className="form-control" type="text" required name="Title" id="nombre" onChange={handleChange} value={values.Title}/>
                             <br/>
-                            <label htmlFor="apellidos">Apellidos</label>
-                            <input className="form-control" type="text" name="apellidos" id="apellidos" onChange={this.handleChange} value={form?form.apellidos:''}/>
+                            <label htmlFor="precio">Año</label>
+                        <input className="form-control" type="text" required name="Year" id="precio" onChange={handleChange} value={Year}/>
                             <br/>
-                            <label htmlFor="telefono">Teléfono</label>
-                            <input className="form-control" type="text" name="telefono" id="telefono" onChange={this.handleChange} value={form?form.telefono:''}/>
+                            <label htmlFor="iva">Calificación</label>
+                        <input className="form-control" type="text" required name="Value" id="calificacion" onChange={handleChange} value={values?values.Value:''}/>
                             <br/>
-                            <label htmlFor="celular">Celular</label>
-                            <input className="form-control" type="text" name="celular" id="celular" onChange={this.handleChange} value={form?form.celular:''}/>
+                            <label htmlFor="descripcion">Descripcion</label>
+                        <input className="form-control" type="text" required name="Description" id="descripcion" onChange={handleChange} value={values?values.Description:''}/>
                             <br/>
-                            <label htmlFor="direccion">Dirección</label>
-                            <input className="form-control" type="text" name="direccion" id="direccion" onChange={this.handleChange} value={form?form.direccion:''}/>
+                            <label htmlFor="descripcion">Imagen</label>
+                        <input className="form-control" type="text" required name="Poster" id="descripcion" onChange={handleChange} value={values?values.Poster:''}/>
                             <br/>
-                            <input 
-                            id="fileSelector"
-                            type="file"
-                            name="file"
-                            style={{display: 'none'}}
-                            onChange={this.handleFileChange}
-                            />
-
-                            <button className="btn btn-success"
-                            onClick={() => this.handlePictureClick()}
-                            >Imagen</button>
-
-                            <input 
-                            type="text"
-                            name="imagen"
-                            id="image"
-                            value={form?form.imagen:''}
-                            onBlur={this.handleChange}
-                            />
-
-                        </div>
+  
+                                     </div>
 
                     </ModalBody>
                     <ModalFooter>
-                       {this.state.tipoModal==='insertar'}
+                       {tipoModal ==='insertar'}
                         <button className="btn btn-success"
-                        onClick={() => this.peticionesPost()}>
+                        onClick={() =>{ peticionPost();setValues({}) }}>
                             Insertar
                         </button>
-                        <button className="btn btn-primary"
-                        onClick={() => this.peticionPut()}>
+                        
+                        <button className="btn btn-primary" 
+                        onClick={() =>{ peticionPut();setValues({}) }}>
                             Actualizar
                         </button>
                         <button className="btn btn-danger"
-                         onClick={() => this.modalInsertar()}
+                         onClick={() =>{ modalInsertar1();setValues({}) }}
                            >
                             Cancelar
                         </button>
                     </ModalFooter>
                 </Modal>
 
-                <Modal isOpen={this.state.modalEliminar}>
+                <Modal isOpen={modalEliminar}>
                     <ModalBody>
-                        Está seguro de eliminar el estudiante {form && form.nombres}
-                    </ModalBody>
+                    Está seguro de eliminar {values && values.Title}
+                   </ModalBody>
                     <ModalFooter>
-                        <button className="btn btn-danger"
-                       onClick={() => this.peticionDelete()}>Sí</button>
+                    <button className="btn btn-danger"
+                       onClick={peticionDelete}>Sí</button>
                         <button className="btn btn-secundary"
-                       onClick={() => this.setState({modalEliminar:false})}>No</button>
+                       onClick={() => setTipoModalEliminar(false)}>No</button>
                     </ModalFooter>
                 </Modal>
-            </div>
-        )
-    }
+       
+    </div>
+    )
 }
+
+export default RegistroProducto

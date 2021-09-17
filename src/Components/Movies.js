@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react';
 import Cards from '../Components/Cards'
 import {H1} from '../Styled/App'
+import { Link } from 'react-router-dom';
 const Movies = () => {
 
     const [peliculas, setPeliculas] = useState([])
@@ -19,13 +20,16 @@ const Movies = () => {
         <>
 
         <H1>Todas las peliculas</H1>
-        <div className="container row row-cols-1 row-cols-md-5 g-4 py-5 text-center">
+        <div  className="container row row-cols-1 row-cols-md-5 g-4 py-5 text-center">
             {
+                 
                 peliculas.map(movie => (
+                    <Link to={`/Descripcion/${movie.id}`}>
                     <Cards
                         key={movie.id}
                         movie={movie}
                     />
+                    </Link>
                 ))
             }
         </div>
