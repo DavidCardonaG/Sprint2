@@ -9,7 +9,7 @@ const url = "https://block-master.herokuapp.com/peliculas";
 function Navbar(){
 
     const [pelis,setPelis] = useState([]);
-    const [tpeliculas,setTpeliculas] = useState([]);
+    // const [tpeliculas,setTpeliculas] = useState([]);
     const [search,setSearch] = useState("");
 
     const peticionSearch = async() =>{
@@ -24,13 +24,13 @@ function Navbar(){
 
     const handleChange =(e) => {
         setSearch(e.target.value)
-       filtrar(e.target.value )
+       console.log(e.target.value )
     }
 
-    const filtrar=(terminoBusqueda)=>{
+    // const filtrar=(terminoBusqueda)=>{
 
-        setTpeliculas(terminoBusqueda);
-      }
+    //     setTpeliculas(terminoBusqueda);
+    //   }
 
     useEffect(()=>{
         peticionSearch()
@@ -38,7 +38,7 @@ function Navbar(){
 
     return (
         <div>
-             { pelis &&
+             {/* { pelis &&
                 pelis.map(movies => (
                     <Cards
                         key={movies.id}
@@ -46,7 +46,7 @@ function Navbar(){
                     />
                     
                 ))
-            }
+            } */}
             <Header>
                 <NAV className="">
                     <img 
