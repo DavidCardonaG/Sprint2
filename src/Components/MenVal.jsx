@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import Cards from './Cards'
-import {H1} from '../Styled/App'
+import {H1M} from '../Styled/App'
 import { Link } from 'react-router-dom';
 
 
@@ -20,9 +20,9 @@ const Valoracion = () => {
     return(
         <>
 
-        <H1>MENOS VALORADAS</H1>
-        <Link to="/"> <strong>RETURN</strong></Link>
-        <div  className="container row row-cols-1 row-cols-md-5 g-4 py-5 text-center">
+        <H1M>MENOS VALORADAS</H1M>
+        <Link  to="/"> <i id="returnmas" class="fas fa-arrow-left"></i></Link>
+        <div  className="container row row-cols-1 row-cols-md-3 g-0 py-3">
             {
                  
                 peli.map(mas => (

@@ -43,7 +43,7 @@ function Navbar(){
 
     return (
         <div>
-             { pelis &&
+             {/* { pelis &&
                 pelis.map(movies => (
                     <Cards
                         key={movies.id}
@@ -51,7 +51,7 @@ function Navbar(){
                     />
                     
                 ))
-            }
+            } */}
             <Header>
                 <NAV className="">
                     <img 
@@ -60,15 +60,15 @@ function Navbar(){
                         alt="User Icon" 
                         className="icon"/>
                     <Lin>
-                  <a className="link" href="#">Todas</a>
+                  <Link id="lin" to="/">Todas</Link>
                   </Lin>
                   <Lin>
-                  <Link to="/Mas/"> Más Valoradas</Link>
+                  <Link id="lin" to="/Mas/"> Más Valoradas</Link>
                   </Lin>
                   <Lin>
-                  <Link to="/Menos">Menos Valoradas</Link>
+                  <Link id="lin" to="/Menos">Menos Valoradas</Link>
                 </Lin>
-                <Link className="link" to="/Crud/">Administrar Peliculas </Link>
+                <Link id="lin" to="/Crud/">Administrar Peliculas </Link>
                 <input 
                  type ="text"
                  name ="searchTerm"

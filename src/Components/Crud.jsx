@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import {H1M} from '../Styled/App'
 import Swal from 'sweetalert2'
 import {  RiDeleteBin5Line } from "react-icons/ri";
 import { BiEdit } from "react-icons/bi";
@@ -110,27 +111,27 @@ function RegistroProducto() {
 console.log(setValues)
     return (
         <div className="App">
-            <Link to="/"> <strong>X</strong></Link>
+            <H1M className="titleBodega">TIENDA PELICULAS</H1M>
+            <Link  to="/"> <i id="returnmas" class="fas fa-arrow-left"></i></Link>
                 <button className="btn btn-primary" style={{display: 'flex', margin: "20px auto"}}
                 onClick={() => {setTipoModal('insertar');modalInsertar1()}}
                 >Registrar Nueva Pelicula</button>
                 <form onSubmit={filtro} >
-                <input type="text"  name="buscar" style={{display: 'flex', margin: "5px auto"}}  onChange={handleChangeBusca} placeholder="Ingrese el producto a buscar"/>
+                <input type="text"  name="buscar" style={{display: 'flex', margin: "5px auto"}}  onChange={handleChangeBusca} placeholder="Titulo de la pelicula"/>
                 </form>
                 <button className="btn btn-success" style={{display: 'flex', margin: "5px auto"}}
                 onClick={filtro}
                 >Buscar</button>
                 <br /> <br />
-                <h1 className="titleBodega">TIENDA PELICULAS</h1>
                 <table className="table">
                     <thead>
-                        <tr>
+                        <tr id="table1">
                             
-                            <th></th>
-                            <th>Titulo</th>
-                            <th>Año</th>
-                            <th>Calificación</th>
-                            <th>Imagen</th>
+                            <th>IMAGEN</th>
+                            <th>TÍTULO</th>
+                            <th>AÑO</th>
+                            <th>CALIFICACIÓN</th>
+                            <th>DESCRIPCIÓN</th>
                             <th></th>
                     </tr>
                     </thead>
@@ -138,11 +139,11 @@ console.log(setValues)
                         {
                             peliculas.map(produc => {
                                 return(
-                                    <tr key={produc.id}>
+                                    <tr id ="table" key={produc.id}>
                                         <td><img src={produc.Poster} width="100px" height="120px" alt=""/></td>
                                         <td>{produc.Title}</td>
                                         <td>{produc.Year}</td>
-                                        <td>{produc.Value}</td>
+                                        <td><i class="fas fa-star"></i>{produc.Value}</td>
                                         <td>{produc.Description}</td>
                                        <td> <button className="btn btn-primary"
                                          onClick={() => {seleccionar(produc); modalInsertar1()}}><BiEdit/></button>

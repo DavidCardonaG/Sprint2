@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-import {MainDetalles, ProfileM, BX, BA, IVA, TitleDetalles, PreciosDetalles, DescripcionD} from '../Styled/Rejistro_Styled'
+import {MainDetalles, ProfileM, BX, Value, TitleDetalles, AñoDetalles, DescripcionD} from '../Styled/App'
 
 const Descripcion = () => {
 
@@ -35,8 +35,8 @@ const Descripcion = () => {
         }
         const later = () =>{
             Swal.fire(
-                'Gracias Por Elegirnos!',
-                'Disfruta la pelicula!',
+                'Lo Sentimos!',
+                'Será En La Próxima!',
                 'error'
               )
               setTimeout(function(){window.location = 'http://localhost:3000'} , 3000);  
@@ -54,11 +54,11 @@ const Descripcion = () => {
      <Link to="/"> <BX id="Salir"> <strong>X</strong> </BX></Link>
    
                  <TitleDetalles>{info.Title}</TitleDetalles>
-                <PreciosDetalles>{info.Year}</PreciosDetalles>
-                <IVA>{info.Value}</IVA>
+                <AñoDetalles>{info.Year}</AñoDetalles>
+                <Value id="value-card" ><i class="fas fa-star"></i>  {info.Value}</Value>
                  <DescripcionD>{info.Description}</DescripcionD> 
-                 <button  onClick={trailer} ><i id="fas2" class="fas fa-play"></i>VER AHORA</button>
-                 <button  onClick={later}><i class="fas fa-plus"></i>VER DESPUES</button>
+                 <button  id="btn3" onClick={trailer} ><i id="fas2" class="fas fa-play"></i>VER AHORA</button>
+                 <button id="btn4" onClick={later}><i class="fas fa-plus"></i>VER DESPUES</button>
                  
         </div>
          </MainDetalles>
