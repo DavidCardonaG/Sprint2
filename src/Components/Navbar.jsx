@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import { Link} from 'react-router-dom';
 import {NAV,Header,Lin} from '../Styled/App'
+// import Movies from '../Components/'
 import Cards from '../Components/Cards'
 import axios from 'axios'
 const url = "https://block-master.herokuapp.com/peliculas";
@@ -23,19 +24,13 @@ function Navbar(){
 
     const handleChange =(e) => {
         setSearch(e.target.value)
-       console.log(e.target.value )
+       filtrar(e.target.value )
     }
 
-    // const filtrar=(terminoBusqueda)=>{
-    //     var resultadosBusqueda=tpeliculas.filter((elemento)=>{
-    //       if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-    //       || elemento.company.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-    //       ){
-    //         return elemento;
-    //       }
-    //     });
-    //     setTpeliculas(resultadosBusqueda);
-    //   }
+    const filtrar=(terminoBusqueda)=>{
+
+        setTpeliculas(terminoBusqueda);
+      }
 
     useEffect(()=>{
         peticionSearch()
@@ -43,7 +38,7 @@ function Navbar(){
 
     return (
         <div>
-             {/* { pelis &&
+             { pelis &&
                 pelis.map(movies => (
                     <Cards
                         key={movies.id}
@@ -51,7 +46,7 @@ function Navbar(){
                     />
                     
                 ))
-            } */}
+            }
             <Header>
                 <NAV className="">
                     <img 
